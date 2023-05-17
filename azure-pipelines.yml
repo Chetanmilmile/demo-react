@@ -28,3 +28,18 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
     
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(9eac4258-492d-431f-89bd-ac19b8758e2b)'
+    appType: 'webApp'
+    WebAppName: 'hitachiuser'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
